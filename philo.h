@@ -21,7 +21,7 @@
 
 typedef struct s_data
 {
-	unsigned long 	begin;
+	unsigned long long 	begin;
 	unsigned int	num_of_philos;
 	int 			time_die;
 	int 			time_eat;
@@ -32,7 +32,7 @@ typedef struct s_philo
 {
 	int 			id;
 	int 			meals_to_eat;
-	unsigned long	last_ate;
+	unsigned long long	last_ate;
 	int				rchopstick;
 	int				lchopstick;
 	int				died;
@@ -40,6 +40,6 @@ typedef struct s_philo
 	t_data			*data;
 } t_philo;
 
-unsigned long ft_abs_time(void);
+unsigned long long ft_abs_time(void);
 
 #endif
