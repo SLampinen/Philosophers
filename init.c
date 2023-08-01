@@ -34,7 +34,7 @@ int	ft_init(t_data **data, t_philo ***philo, char **argv)
 		return (0);
 	init_data(*data, argv);
 	*philo = (t_philo **)malloc(sizeof(philo) * (*data)->num_of_philos);
-	if (**philo == NULL)
+	if (*philo == NULL)
 	{
 		free(*data);
 		return (0);
@@ -101,10 +101,10 @@ int	init_philo(t_philo **philo, t_data *data)
 		philo[i]->id = i + 1;
 		philo[i]->last_ate = data->begin;
 		philo[i]->meals_to_eat = -1;
-		philo[i]->lchopstick = i + 1;
-		philo[i]->rchopstick = i + 2;
+		philo[i]->lchopstick = i;
+		philo[i]->rchopstick = i + 1;
 		if (i + 2 > data->num_of_philos)
-			philo[i]->rchopstick = 1;
+			philo[i]->rchopstick = 0;
 		philo[i]->done = 0;
 		philo[i]->data = data;
 		i++;
