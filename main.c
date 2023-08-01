@@ -75,24 +75,28 @@ void	*routine(void *data)
 	return (NULL);
 }
 
-void	start_philos(t_data *data, t_philo **philo)
+pthread_t	*start_philos(t_data *data, t_philo **philo)
 {
 	unsigned int	i;
 	pthread_t		*thr;
 
 	i = 0;
 	thr = malloc(sizeof(pthread_t) * data->num_of_philos);
+	if (thr == NULL)
+		return (0);
 	while (i < data->num_of_philos)
 	{
 		pthread_create(&thr[i], 0, routine, philo[i]);
 		i++;
 	}
+	return (thr);
 }
 
 int	main(int argc, char **argv)
 {
-	t_data	*data;
-	t_philo	**philo;
+	t_data		*data;
+	pthread_t	*thr;
+	t_philo		**philo;
 
 	data = NULL;
 	philo = NULL;
@@ -106,10 +110,16 @@ int	main(int argc, char **argv)
 	}
 	if (argc == 6)
 		set_meals(&philo, argv);
-	start_philos(data, philo);
+	thr = start_philos(data, philo);
+	if (thr == NULL)
+		{
+			ft_destroy_mutex(philo);
+			ft_free(philo, data);
+			return (0);
+		}
 	while (ft_monitor(data, philo))
-	{
-	}
+	{}
+	free(thr);
 	ft_destroy_mutex(philo);
 	ft_free(philo, data);
 	return (0);
