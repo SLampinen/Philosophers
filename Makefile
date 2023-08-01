@@ -14,7 +14,6 @@ NAME = philo
 
 SOURCES = main.c init.c utils.c monitor.c time_utils.c 
 OBJECTS = $(SOURCES:%.c=%.o)
-INCLUDE = -lmlx -framework OpenGL -framework AppKit
 
 CFLAGS = -Wall -Werror -Wextra
 
