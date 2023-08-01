@@ -65,7 +65,7 @@ void	*routine(void *data)
 		sim_time(self->data->begin), self->id);
 		ft_msleep(1);
 	}
-	while (1)
+	while (self->data->status)
 	{
 		if (ft_eat(self))
 			ft_finish_eating(self);
@@ -94,9 +94,10 @@ pthread_t	*start_philos(t_data *data, t_philo **philo)
 
 int	main(int argc, char **argv)
 {
-	t_data		*data;
-	pthread_t	*thr;
-	t_philo		**philo;
+	t_data			*data;
+	pthread_t		*thr;
+	t_philo			**philo;
+	unsigned int	i;
 
 	data = NULL;
 	philo = NULL;
@@ -119,6 +120,12 @@ int	main(int argc, char **argv)
 		}
 	while (ft_monitor(data, philo))
 	{}
+	i = 0;
+	while (i < data->num_of_philos)
+	{
+		pthread_join(thr[i], NULL);
+		i++;
+	}
 	free(thr);
 	ft_destroy_mutex(philo);
 	ft_free(philo, data);

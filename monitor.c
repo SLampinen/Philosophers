@@ -15,9 +15,13 @@
 int	ft_monitor(t_data *data, t_philo **philo)
 {
 	if (philos_are_alive(data, philo) == 0)
+	{
+		data->status = 0;
 		return (0);
+	}
 	if (philos_work(data, philo) == 0)
 	{
+		data->status = 0;
 		printf("Done\n");
 		return (0);
 	}

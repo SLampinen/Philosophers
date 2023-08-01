@@ -59,6 +59,7 @@ void	init_data(t_data *data, char **argv)
 	data->time_die = ft_atol(argv[2]);
 	data->time_eat = ft_atol(argv[3]);
 	data->time_sleep = ft_atol(argv[4]);
+	data->status = 1;
 }
 
 int	init_mutexes(t_philo **philo, t_data *data)

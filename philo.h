@@ -25,6 +25,7 @@ typedef struct s_data
 	int				time_die;
 	int				time_eat;
 	int				time_sleep;
+	int				status;
 }	t_data;
 
 typedef struct s_philo
