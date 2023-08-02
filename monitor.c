@@ -6,7 +6,7 @@
 /*   By: slampine <slampine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 14:11:55 by slampine          #+#    #+#             */
-/*   Updated: 2023/08/01 11:55:32 by slampine         ###   ########.fr       */
+/*   Updated: 2023/08/02 16:19:34 by slampine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,25 @@
 
 int	ft_monitor(t_data *data, t_philo **philo)
 {
+	unsigned int	i;
+
+	i = 0;
 	if (philos_are_alive(data, philo) == 0)
 	{
 		data->status = 0;
+		ft_msleep(100);
+		while (i < data->num_of_philos)
+		{
+			pthread_mutex_lock(&philo[i]->chopstick[philo[i]->lchopstick]);
+			pthread_mutex_lock(&philo[i]->chopstick[philo[i]->rchopstick]);
+			i++;
+		}
 		return (0);
 	}
 	if (philos_work(data, philo) == 0)
 	{
 		data->status = 0;
-		printf("Done\n");
+		printf("All have eaten enough, philosophy is now complete\n");
 		return (0);
 	}
 	return (1);
@@ -37,8 +47,9 @@ int	philos_are_alive(t_data *data, t_philo **philo)
 	{
 		if (ft_abs_time() > philo[i]->last_ate + data->time_die)
 		{
-			printf("%lu philo %i died, last ate %lu\n", \
-			sim_time(data->begin), i + 1, philo[i]->last_ate - data->begin);
+			pthread_mutex_lock(philo[i]->data->dead);
+			printf("%lu philo %i died\n", \
+			sim_time(data->begin), i + 1);
 			return (0);
 		}
 		i++;

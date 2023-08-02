@@ -6,7 +6,7 @@
 /*   By: slampine <slampine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 14:05:20 by slampine          #+#    #+#             */
-/*   Updated: 2023/08/01 15:16:51 by slampine         ###   ########.fr       */
+/*   Updated: 2023/08/02 16:07:45 by slampine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ void	ft_free(t_philo **philo, t_data *data)
 	unsigned int	i;
 
 	i = 0;
-	free(philo[0]->chopstick);
+	free(philo[i]->chopstick);
+	free(data->dead);
 	while (i < data->num_of_philos)
 	{
 		free(philo[i]);
@@ -63,4 +64,11 @@ void	ft_destroy_mutex(t_philo **philo)
 			i++;
 		}
 	}
+}
+
+void ft_print(t_philo *philo, char *msg)
+{
+	if (philo->data->status == 0)
+		return ;
+	printf("%lu %i %s\n",sim_time(philo->data->begin), philo->id, msg);
 }

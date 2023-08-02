@@ -6,22 +6,30 @@
 /*   By: slampine <slampine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 14:01:16 by slampine          #+#    #+#             */
-/*   Updated: 2023/08/01 15:11:37 by slampine         ###   ########.fr       */
+/*   Updated: 2023/08/02 15:59:55 by slampine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	set_meals(t_philo ***philo, char **argv)
+int	set_meals(t_philo ***philo, char **argv)
 {
 	int	i;
 
 	i = 0;
+	if (ft_atol(argv[5]) == 0)
+	{
+		printf("All have eaten enough, philosophy is now complete\n");
+		ft_destroy_mutex(*philo);
+		ft_free(*philo, (*philo)[i]->data);
+		return (0);
+	}
 	while (i < ft_atol(argv[1]))
 	{
 		(*philo)[i]->meals_to_eat = ft_atol(argv[5]);
 		i++;
 	}
+	return (1);
 }
 
 int	ft_init(t_data **data, t_philo ***philo, char **argv)
@@ -30,12 +38,12 @@ int	ft_init(t_data **data, t_philo ***philo, char **argv)
 
 	i = 0;
 	*data = (t_data *)malloc(sizeof(t_data));
-	if (*data == NULL)
+	if (init_data(*data, argv) == 0)
 		return (0);
-	init_data(*data, argv);
 	*philo = (t_philo **)malloc(sizeof(philo) * (*data)->num_of_philos);
 	if (*philo == NULL)
 	{
+		free((*data)->dead);
 		free(*data);
 		return (0);
 	}
@@ -46,20 +54,36 @@ int	ft_init(t_data **data, t_philo ***philo, char **argv)
 			free(philo[i]);
 			i++;
 		}
+		free((*data)->dead);
 		free(*data);
 		return (0);
 	}
 	return (1);
 }
 
-void	init_data(t_data *data, char **argv)
+int	init_data(t_data *data, char **argv)
 {
+	pthread_mutex_t	*dead;
+
+	if (data == NULL)
+		return (0);
+	if (ft_atol(argv[1]) <= 0 || ft_atol(argv[2]) <= 0
+		|| ft_atol(argv[3]) <= 0 || ft_atol(argv[4]) <= 0)
+		return (0);
+	dead = malloc(sizeof(pthread_mutex_t));
+	if (dead == NULL)
+	{
+		free (data);
+		return (0);
+	}
+	data->dead = dead;
 	data->begin = ft_abs_time();
 	data->num_of_philos = ft_atol(argv[1]);
 	data->time_die = ft_atol(argv[2]);
 	data->time_eat = ft_atol(argv[3]);
 	data->time_sleep = ft_atol(argv[4]);
 	data->status = 1;
+	return (1);
 }
 
 int	init_mutexes(t_philo **philo, t_data *data)
@@ -77,6 +101,7 @@ int	init_mutexes(t_philo **philo, t_data *data)
 			i++;
 		}
 		free(philo);
+		free(data->dead);
 		free(data);
 		return (0);
 	}
