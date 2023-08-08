@@ -6,7 +6,7 @@
 /*   By: slampine <slampine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:15:01 by slampine          #+#    #+#             */
-/*   Updated: 2023/08/02 16:19:50 by slampine         ###   ########.fr       */
+/*   Updated: 2023/08/08 13:33:27 by slampine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,17 @@
 
 int	ft_eat(t_philo *self)
 {
-	pthread_mutex_lock(&self->chopstick[self->rchopstick]);
-	ft_print(self, "has taken a fork");
 	pthread_mutex_lock(&self->chopstick[self->lchopstick]);
+	if (self->data->status == 0)
+		return (0);
+	ft_print(self, "has taken a fork");
+	pthread_mutex_lock(&self->chopstick[self->rchopstick]);
+	if (self->data->status == 0)
+		return (0);
 	ft_print(self, "has taken a fork");
 	pthread_mutex_lock(self->data->dead);
+	if (self->data->status == 0)
+		return (0);
 	ft_print(self, "is eating");
 	pthread_mutex_unlock(self->data->dead);
 	self->last_ate = ft_abs_time();
@@ -32,7 +38,7 @@ void	ft_finish_eating(t_philo *self)
 	pthread_mutex_unlock(&self->chopstick[self->rchopstick]);
 	if (self->data->status == 0)
 		return ;
-	ft_print(self,"is sleeping");
+	ft_print(self, "is sleeping");
 	if (self->meals_to_eat > 0)
 		self->meals_to_eat--;
 	if (self->meals_to_eat == 0)
@@ -40,7 +46,7 @@ void	ft_finish_eating(t_philo *self)
 	ft_msleep(self->data->time_sleep);
 	if (self->data->status == 0)
 		return ;
-	ft_print(self,"is thinking");
+	ft_print(self, "is thinking");
 }
 
 void	*routine(void *data)
@@ -50,10 +56,10 @@ void	*routine(void *data)
 	self = (t_philo *)data;
 	if (self->id % 2)
 	{
-		ft_print(self,"is thinking");
+		ft_print(self, "is thinking");
 		ft_msleep(1);
 	}
-	while (self->data->status)
+	while (self->status)
 	{
 		if (ft_eat(self))
 			ft_finish_eating(self);
@@ -89,9 +95,7 @@ int	main(int argc, char **argv)
 	t_data			*data;
 	pthread_t		*thr;
 	t_philo			**philo;
-	unsigned int	index;
 
-	index = 0;
 	data = NULL;
 	philo = NULL;
 	if (argc < 5 || argc > 6)
@@ -109,13 +113,6 @@ int	main(int argc, char **argv)
 	{
 		usleep(50);
 	}
-	while (index < data->num_of_philos)
-	{
-		pthread_join(thr[index], NULL);
-		index++;
-	}
-	free(thr);
-	ft_destroy_mutex(philo);
-	ft_free(philo, data);
+	ft_end(philo, data, thr);
 	return (0);
 }

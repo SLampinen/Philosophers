@@ -6,7 +6,7 @@
 /*   By: slampine <slampine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 14:05:20 by slampine          #+#    #+#             */
-/*   Updated: 2023/08/02 16:07:45 by slampine         ###   ########.fr       */
+/*   Updated: 2023/08/08 13:18:46 by slampine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,25 @@ void	ft_destroy_mutex(t_philo **philo)
 	}
 }
 
-void ft_print(t_philo *philo, char *msg)
+void	ft_print(t_philo *philo, char *msg)
 {
-	if (philo->data->status == 0)
+	if (philo->status == 0)
 		return ;
-	printf("%lu %i %s\n",sim_time(philo->data->begin), philo->id, msg);
+	printf("%lu %i %s\n", sim_time(philo->data->begin), philo->id, msg);
+}
+
+void	ft_end(t_philo **philo, t_data *data, pthread_t *thr)
+{
+	unsigned int	index;
+
+	index = 0;
+	while (index < data->num_of_philos)
+	{
+		philo[index]->status = 0;
+		pthread_join(thr[index], NULL);
+		index++;
+	}
+	free(thr);
+	ft_destroy_mutex(philo);
+	ft_free(philo, data);
 }

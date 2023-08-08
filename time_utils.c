@@ -6,7 +6,7 @@
 /*   By: slampine <slampine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 10:47:40 by slampine          #+#    #+#             */
-/*   Updated: 2023/08/02 16:18:03 by slampine         ###   ########.fr       */
+/*   Updated: 2023/08/08 13:30:33 by slampine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,11 @@ unsigned long	sim_time(unsigned long begin)
 
 void	ft_msleep(int time)
 {
-	while (time)
+	unsigned long	st_time;
+
+	st_time = ft_abs_time();
+	while (st_time + (time) > ft_abs_time())
 	{
-		usleep(50);
-		usleep(50);
-		time--;
+		usleep(500);
 	}
 }

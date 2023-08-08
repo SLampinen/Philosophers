@@ -6,7 +6,7 @@
 /*   By: slampine <slampine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:18:15 by slampine          #+#    #+#             */
-/*   Updated: 2023/08/02 16:10:11 by slampine         ###   ########.fr       */
+/*   Updated: 2023/08/08 13:06:17 by slampine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_philo
 	int				rchopstick;
 	int				lchopstick;
 	int				done;
+	int				status;
 	pthread_mutex_t	*chopstick;
 	t_data			*data;
 }	t_philo;
@@ -45,7 +46,6 @@ unsigned long	ft_abs_time(void);
 unsigned long	sim_time(unsigned long begin);
 void			ft_msleep(int time);
 long			ft_atol(char *str);
-void			ft_free(t_philo **philo, t_data *data);
 int				set_meals(t_philo ***philo, char **argv);
 int				ft_init(t_data **data, t_philo ***philo, char **argv);
 int				init_data(t_data *data, char **argv);
@@ -53,6 +53,8 @@ int				init_philo(t_philo **philo, t_data *data);
 int				ft_monitor(t_data *data, t_philo **philo);
 int				philos_are_alive(t_data *data, t_philo **philo);
 int				philos_work(t_data *data, t_philo **philo);
+void			ft_end(t_philo **philo, t_data *data, pthread_t *thr);
+void			ft_free(t_philo **philo, t_data *data);
 void			ft_destroy_mutex(t_philo **philo);
 void			ft_print(t_philo *philo, char *msg);
 #endif

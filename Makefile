@@ -6,7 +6,7 @@
 #    By: slampine <slampine@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/10 10:08:26 by slampine          #+#    #+#              #
-#    Updated: 2023/08/02 09:49:33 by slampine         ###   ########.fr        #
+#    Updated: 2023/08/08 13:31:20 by slampine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = philo
 SOURCES = main.c init.c utils.c monitor.c time_utils.c 
 OBJECTS = $(SOURCES:%.c=%.o)
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -fsanitize=thread -g
 
 all: $(NAME)
 

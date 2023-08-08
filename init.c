@@ -6,7 +6,7 @@
 /*   By: slampine <slampine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 14:01:16 by slampine          #+#    #+#             */
-/*   Updated: 2023/08/02 15:59:55 by slampine         ###   ########.fr       */
+/*   Updated: 2023/08/08 13:06:35 by slampine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ int	init_data(t_data *data, char **argv)
 		return (0);
 	if (ft_atol(argv[1]) <= 0 || ft_atol(argv[2]) <= 0
 		|| ft_atol(argv[3]) <= 0 || ft_atol(argv[4]) <= 0)
+	{
+		free(data);
 		return (0);
+	}
 	dead = malloc(sizeof(pthread_mutex_t));
 	if (dead == NULL)
 	{
@@ -133,6 +136,7 @@ int	init_philo(t_philo **philo, t_data *data)
 			philo[i]->rchopstick = 0;
 		philo[i]->done = 0;
 		philo[i]->data = data;
+		philo[i]->status = 1;
 		i++;
 	}
 	if (init_mutexes(philo, data) == 0)
